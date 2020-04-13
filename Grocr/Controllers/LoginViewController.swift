@@ -169,8 +169,8 @@ class LoginViewController: UIViewController {
                           message: "Insert family name",
                           preferredStyle: .alert)
 
-    createFamilyAlert.addTextField = { textFamilyName in
-      textFamilyName.placeholder= "Family Name"
+    createFamilyAlert.addTextField  { textFamilyName in
+      textFamilyName.placeholder = "Family Name"
     }
     let createAction = UIAlertAction(title: "Join", style: .default){ _ in
       // todo :: join a family by uid
