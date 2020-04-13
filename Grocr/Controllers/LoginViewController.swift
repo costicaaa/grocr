@@ -89,6 +89,14 @@ class LoginViewController: UIViewController {
     let alert = UIAlertController(title: "Register",
                                   message: "Register",
                                   preferredStyle: .alert)
+    //create or join family
+    let createOrJoinFamilyAlert = UIAlertController(title: "Join or create a family",
+                                                  message: "",
+                                                  preferredStyle: .alert)
+    
+    let createFamilyAlert = UIAlertController(title: "Create a family",
+    message: "Insert family name",
+    preferredStyle: .alert)
     
     let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
       
@@ -113,7 +121,7 @@ class LoginViewController: UIViewController {
                 if(error != nil){
                     print("Error",error)
                 }else{
-                   present(createOrJoinFamilyAlert, animated: true, completion: nil)
+                    self.present(createOrJoinFamilyAlert, animated: true, completion: nil)
                 }
             }
 
@@ -145,10 +153,7 @@ class LoginViewController: UIViewController {
     alert.addAction(cancelAction)
     
 
-    //create or join family
-    let createOrJoinFamilyAlert = UIAlertController(title: "Join or create a family",
-                                                  message: "",
-                                                  preferredStyle: .alert)
+    
 
 
 
@@ -157,7 +162,7 @@ class LoginViewController: UIViewController {
     // }
 
     let createFamilyAction = UIAlertAction(title: "Create", style: .default) { _ in 
-        present(createFamilyAlert, animated: true, completion: nil)
+        self.present(createFamilyAlert, animated: true, completion: nil)
     }
 
     // createOrJoinFamilyAlert.addAction(joinFamilyAction)
@@ -165,9 +170,7 @@ class LoginViewController: UIViewController {
 
     //end
 
-    let createFamilyAlert = UIAlertController(title: "Create a family",
-                          message: "Insert family name",
-                          preferredStyle: .alert)
+    
 
     createFamilyAlert.addTextField  { textFamilyName in
       textFamilyName.placeholder = "Family Name"
