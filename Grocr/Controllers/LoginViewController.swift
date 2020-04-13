@@ -50,7 +50,6 @@ class LoginViewController: UIViewController {
     
     Auth.auth().addStateDidChangeListener() { auth, user in
       if user != nil {
-        self.performSegue(withIdentifier: self.loginToList, sender: nil)
         self.textFieldLoginEmail.text = nil
         self.textFieldLoginPassword.text = nil
         self.textFieldUserName = nil
@@ -110,13 +109,53 @@ class LoginViewController: UIViewController {
                 if(error != nil){
                     print("Error",error)
                 }else{
-                    print("\n\n\n\n\nYou are Offline...")
+                   let createOrJoinFamilyAlert = UIAlertController(title: "Join or create a family",
+                                                  message: "",
+                                                  preferredStyle: .alert)
+
+                                          
+                   
+                   let joinFamilyAction = UIAlertAction(title: "Join", style: .default) { _ in 
+                      let joinFamilyAlert = UIAlertController(title: "Select family",
+                                                  message: "Insert family UID",
+                                                  preferredStyle: .alert)
+                            joinFamilyAlert.addTextField = { textFamilyUID in 
+                              textFamilyUID.placeholder= "Family UID"
+                            }
+
+                            joinFamilyAlert.addAction(joinAction)
+
+                   }
+
+
+                   let createFamilyAction = UIAlertAction(title: "Create", style: .default) { _ in 
+                      let createFamilyAlert = UIAlertController(title: "Create a family",
+                                                  message: "Insert family name",
+                                                  preferredStyle: .alert)
+                            joinFamilyAlert.addTextField = { textFamilyName in 
+                              textFamilyName.placeholder= "Family Name"
+                            }
+
+                            createFamilyAlert.addAction(createAction)
+
+                   }
+                   
+                  createOrJoinFamilyAlert.addAction(joinFamilyAction)
+                  createOrJoinFamilyAlert.addAction(createFamilyAction)
                 }
             }
 
 
         }
       }
+    }
+
+    joinAction = UIAlertAction(title: "Join", style: .default){ _ in 
+      // todo :: join a family by uid
+    }
+
+    createAction = UIAlertAction(title: "Join", style: .default){ _ in 
+      // todo :: join a family by uid
     }
     
     alert.addTextField { textUserName in
