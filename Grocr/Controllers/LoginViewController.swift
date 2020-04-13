@@ -113,7 +113,7 @@ class LoginViewController: UIViewController {
                 if(error != nil){
                     print("Error",error)
                 }else{
-                   
+                   present(createOrJoinFamilyAlert, animated: true, completion: nil)
                 }
             }
 
@@ -152,15 +152,15 @@ class LoginViewController: UIViewController {
 
 
 
-    let joinFamilyAction = UIAlertAction(title: "Join", style: .default) { _ in 
-    // todo :: present join fam alert
-    }
+    // let joinFamilyAction = UIAlertAction(title: "Join", style: .default) { _ in 
+    // // todo :: present join fam alert
+    // }
 
     let createFamilyAction = UIAlertAction(title: "Create", style: .default) { _ in 
-    // todo :: present create fam alert
+        present(createFamilyAlert, animated: true, completion: nil)
     }
 
-    createOrJoinFamilyAlert.addAction(joinFamilyAction)
+    // createOrJoinFamilyAlert.addAction(joinFamilyAction)
     createOrJoinFamilyAlert.addAction(createFamilyAction)
 
     //end
@@ -174,6 +174,7 @@ class LoginViewController: UIViewController {
     }
     let createAction = UIAlertAction(title: "Join", style: .default){ _ in
       // todo :: join a family by uid
+      print("muhahahaha it works")
     }
     createFamilyAlert.addAction(createAction)
 
