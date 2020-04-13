@@ -38,6 +38,7 @@ class LoginViewController: UIViewController {
   @IBOutlet weak var textFieldLoginEmail: UITextField!
   @IBOutlet weak var textFieldLoginPassword: UITextField!
   @IBOutlet weak var textFieldUserName: UITextField!
+  @IBOutlet weak var textFamilyUID: UITextField!
 
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -53,6 +54,7 @@ class LoginViewController: UIViewController {
         self.textFieldLoginEmail.text = nil
         self.textFieldLoginPassword.text = nil
         self.textFieldUserName = nil
+        self.textFamilyUID = nil
       }
     }
   }
@@ -116,14 +118,7 @@ class LoginViewController: UIViewController {
                                           
                    
                    let joinFamilyAction = UIAlertAction(title: "Join", style: .default) { _ in 
-                      let joinFamilyAlert = UIAlertController(title: "Select family",
-                                                  message: "Insert family UID",
-                                                  preferredStyle: .alert)
-                            joinFamilyAlert.addTextField = { textFamilyUID in 
-                              textFamilyUID.placeholder= "Family UID"
-                            }
-
-                            joinFamilyAlert.addAction(joinAction)
+                      
 
                    }
 
@@ -132,10 +127,12 @@ class LoginViewController: UIViewController {
                       let createFamilyAlert = UIAlertController(title: "Create a family",
                                                   message: "Insert family name",
                                                   preferredStyle: .alert)
-                            joinFamilyAlert.addTextField = { textFamilyName in 
+                            createFamilyAlert.addTextField = { textFamilyName in
                               textFamilyName.placeholder= "Family Name"
                             }
-
+let createAction = UIAlertAction(title: "Join", style: .default){ _ in
+      // todo :: join a family by uid
+    }
                             createFamilyAlert.addAction(createAction)
 
                    }
@@ -150,13 +147,9 @@ class LoginViewController: UIViewController {
       }
     }
 
-    joinAction = UIAlertAction(title: "Join", style: .default){ _ in 
-      // todo :: join a family by uid
-    }
-
-    createAction = UIAlertAction(title: "Join", style: .default){ _ in 
-      // todo :: join a family by uid
-    }
+    
+    
+    
     
     alert.addTextField { textUserName in
       textUserName.placeholder = "Enter your name"
@@ -175,6 +168,19 @@ class LoginViewController: UIViewController {
                                      style: .cancel)
     alert.addAction(saveAction)
     alert.addAction(cancelAction)
+    
+    
+    let joinFamilyAlert = UIAlertController(title: "Select family",
+                                                      message: "Insert family UID",
+                                                      preferredStyle: .alert)
+                        
+    joinFamilyAlert.addTextField = {
+        
+    }
+    let joinAction = UIAlertAction(title: "Join", style: .default){ _ in
+          // todo :: join a family by uid
+        }
+    joinFamilyAlert.addAction(joinAction)
     
     present(alert, animated: true, completion: nil)
   }  
