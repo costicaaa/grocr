@@ -119,7 +119,7 @@ class LoginViewController: UIViewController {
                     [
                         "userName": nameField.text!,
                         "type": 1,
-                        "familyUID": "fam1"
+                        "familyUID": ""
                 ]
             ) { (error, ref) in
                 if(error != nil){
@@ -181,9 +181,49 @@ class LoginViewController: UIViewController {
     }
 
     let createAction = UIAlertAction(title: "Create family", style: .default){ _ in
-      // todo :: join a family by uid
       print("muhahahaha it works")
+      // let newFamUID = UUID().uuidString
+
+
+
+      // let familyRef =  Database.database().reference(withPath: "families/\(newFamUID)")
+      // familyRef.updateChildValues([
+      //   "familyName": alert.textFields![0],
+      // ]) { (error, ref) in
+      //     if(error != nil){
+      //         print("Error",error)
+      //     }else{
+
+      //       familyRef.child("users").childByAutoId()
+      //       print("now redirect to some listing")
+      //     }
+      // }
+
+      let user = Auth.auth().currentUser!
+
+      guard let key = ref.child("families").childByAutoId().key else { return }
+      let family = ["familyName": alert.textFields![0]]
+      let childUpdates = ["/families/\(key)": family,
+                          "/users-info/\(user.uid)/familyUID/": key]
+      ref.updateChildValues(childUpdates)
+
+      // let currentUserRef = Database.database().reference(withPath: "users-info/\(user.uid)")
+      // currentUserRef.updateChildValues(
+      //         [
+      //             "familyUID": ""
+      //     ]
+      // ) { (error, ref) in
+      //     if(error != nil){
+      //         print("Error",error)
+      //     }else{
+      //         self.present(createOrJoinFamilyAlert, animated: true, completion: nil)
+      //     }
+      // }
+
+      // end create family
     }
+
+
     let joinAction = UIAlertAction(title: "Join family", style: .default){ _ in
       // todo :: join a family by uid
       print("join action complete")
