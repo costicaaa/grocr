@@ -201,10 +201,10 @@ class LoginViewController: UIViewController {
       let user = Auth.auth().currentUser!
 
       let dbRef = Database.database().reference()
-      let key = dbRef.child("families").child(alert.textFields![0].text!).childByAutoId().key
+      let key = dbRef.child("families").child(joinFamilyAlert.textFields![0].text!).childByAutoId().key
       let childUpdates = [
-        "families/\(alert.textFields![0].text!)/users": user.uid,
-        "/users-info/\(user.uid)/familyUID/": alert.textFields![0].text!
+        "families/\(joinFamilyAlert.textFields![0].text!)/users": user.uid,
+        "/users-info/\(user.uid)/familyUID/": joinFamilyAlert.textFields![0].text!
       ]
       dbRef.updateChildValues(childUpdates)
     }
