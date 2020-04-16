@@ -186,12 +186,8 @@ class LoginViewController: UIViewController {
       let dbRef = Database.database().reference()
       let key = dbRef.child("families").childByAutoId().key
       dbRef.child("families").child(key).child("familyName").setValue(createFamilyAlert.textFields![0].text!)
-      // let family = [
-      //   "familyName": createFamilyAlert.textFields![0].text!, 
-      //   "users" : [user.uid]
-      //   ] as [String : Any]
+      dbRef.child("families").child(key).child("users").childByAutoId().setValue(user.uid)
       let childUpdates = [
-        // "/families/\(key)": family,
         "/users-info/\(user.uid)/familyUID/": key
       ] as [String : Any]
       dbRef.updateChildValues(childUpdates)
