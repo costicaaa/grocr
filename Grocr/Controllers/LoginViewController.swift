@@ -181,45 +181,19 @@ class LoginViewController: UIViewController {
     }
 
     let createAction = UIAlertAction(title: "Create family", style: .default){ _ in
-      print("muhahahaha it works")
-      // let newFamUID = UUID().uuidString
-
-
-
-      // let familyRef =  Database.database().reference(withPath: "families/\(newFamUID)")
-      // familyRef.updateChildValues([
-      //   "familyName": alert.textFields![0],
-      // ]) { (error, ref) in
-      //     if(error != nil){
-      //         print("Error",error)
-      //     }else{
-
-      //       familyRef.child("users").childByAutoId()
-      //       print("now redirect to some listing")
-      //     }
-      // }
 
       let user = Auth.auth().currentUser!
       let familiesRef = Database.database().reference()
       let key = familiesRef.child("families").childByAutoId().key
-        let family = ["familyName": alert.textFields![0].text!, "users" : [user.uid]] as [String : Any]
-      let childUpdates = ["/families/\(key)": family,
-        "/users-info/\(user.uid)/familyUID/": key] as [String : Any
-        ]
+      let family = [
+        "familyName": alert.textFields![0].text!, 
+        "users" : [user]
+      ] as [String : Any]
+      let childUpdates = [
+        "/families/\(key)": family,
+        "/users-info/\(user.uid)/familyUID/": key
+      ] as [String : Any]
       familiesRef.updateChildValues(childUpdates)
-
-      // let currentUserRef = Database.database().reference(withPath: "users-info/\(user.uid)")
-      // currentUserRef.updateChildValues(
-      //         [
-      //             "familyUID": ""
-      //     ]
-      // ) { (error, ref) in
-      //     if(error != nil){
-      //         print("Error",error)
-      //     }else{
-      //         self.present(createOrJoinFamilyAlert, animated: true, completion: nil)
-      //     }
-      // }
 
       // end create family
     }
