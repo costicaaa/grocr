@@ -200,12 +200,12 @@ class LoginViewController: UIViewController {
       // }
 
       let user = Auth.auth().currentUser!
-
+      let familiesRef = Database.database().reference()
       guard let key = ref.child("families").childByAutoId().key else { return }
       let family = ["familyName": alert.textFields![0]]
       let childUpdates = ["/families/\(key)": family,
                           "/users-info/\(user.uid)/familyUID/": key]
-      ref.updateChildValues(childUpdates)
+      familiesRef.updateChildValues(childUpdates)
 
       // let currentUserRef = Database.database().reference(withPath: "users-info/\(user.uid)")
       // currentUserRef.updateChildValues(
