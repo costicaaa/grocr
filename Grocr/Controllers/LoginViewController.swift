@@ -198,9 +198,18 @@ class LoginViewController: UIViewController {
 
 
     let joinAction = UIAlertAction(title: "Join family", style: .default){ _ in
-      // todo :: join a family by uid
-      print("join action complete")
+      let user = Auth.auth().currentUser!
+
+      let dbRef = Database.database().reference()
+      let key = dbRef.child("families").child(alert.textFields![0].text!).childByAutoId().key
+      let childUpdates = [
+        "families/\(alert.textFields![0].text!)/users": user.uid,
+        "/users-info/\(user.uid)/familyUID/": alert.textFields![0].text!
+      ]
+      dbRef.updateChildValues(childUpdates)
     }
+
+
     createFamilyAlert.addAction(createAction)
     joinFamilyAlert.addAction(joinAction)
 
