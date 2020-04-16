@@ -98,7 +98,7 @@ class LoginViewController: UIViewController {
     message: "Insert family name",
     preferredStyle: .alert)
 
-    let joniFamilyAlert = UIAlertController(title: "Join a family",
+    let joinFamilyAlert = UIAlertController(title: "Join a family",
     message: "Insert family UID",
     preferredStyle: .alert)
     
