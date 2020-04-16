@@ -97,6 +97,10 @@ class LoginViewController: UIViewController {
     let createFamilyAlert = UIAlertController(title: "Create a family",
     message: "Insert family name",
     preferredStyle: .alert)
+
+    let joniFamilyAlert = UIAlertController(title: "Join a family",
+    message: "Insert family UID",
+    preferredStyle: .alert)
     
     let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
       
