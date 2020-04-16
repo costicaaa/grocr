@@ -183,17 +183,18 @@ class LoginViewController: UIViewController {
     let createAction = UIAlertAction(title: "Create family", style: .default){ _ in
 
       let user = Auth.auth().currentUser!
-      let familiesRef = Database.database().reference()
-      let key = familiesRef.child("families").childByAutoId().key
-      let family = [
-        "familyName": createFamilyAlert.textFields![0].text!, 
-        "users" : [user.uid]
-        ] as [String : Any]
+      let dbRef = Database.database().reference()
+      let key = dbRef.child("families").childByAutoId().key
+      dbRef.child("families").child(key).child("familyName").setValue(createFamilyAlert.textFields![0])
+      // let family = [
+      //   "familyName": createFamilyAlert.textFields![0].text!, 
+      //   "users" : [user.uid]
+      //   ] as [String : Any]
       let childUpdates = [
-        "/families/\(key)": family,
+        // "/families/\(key)": family,
         "/users-info/\(user.uid)/familyUID/": key
       ] as [String : Any]
-      familiesRef.updateChildValues(childUpdates)
+      dbRef.updateChildValues(childUpdates)
     }
 
 
