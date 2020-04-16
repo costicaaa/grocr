@@ -153,13 +153,10 @@ class LoginViewController: UIViewController {
     alert.addAction(cancelAction)
     
 
-    
 
-
-
-    // let joinFamilyAction = UIAlertAction(title: "Join", style: .default) { _ in 
-    // // todo :: present join fam alert
-    // }
+    let joinFamilyAction = UIAlertAction(title: "Join", style: .default) { _ in 
+        self.present(joinFamilyAlert, animated: true, completion: nil)
+    }
 
     let createFamilyAction = UIAlertAction(title: "Create", style: .default) { _ in 
         self.present(createFamilyAlert, animated: true, completion: nil)
@@ -167,19 +164,28 @@ class LoginViewController: UIViewController {
 
     // createOrJoinFamilyAlert.addAction(joinFamilyAction)
     createOrJoinFamilyAlert.addAction(createFamilyAction)
+    createOrJoinFamilyAlert.addAction(joinFamilyAction)
 
     //end
-
-    
 
     createFamilyAlert.addTextField  { textFamilyName in
       textFamilyName.placeholder = "Family Name"
     }
-    let createAction = UIAlertAction(title: "Join", style: .default){ _ in
+
+    joinFamilyAlert.addTextField  { textFamilyUID in
+      textFamilyUID.placeholder = "Family UID ( ask a family member for it )"
+    }
+
+    let createAction = UIAlertAction(title: "Create family", style: .default){ _ in
       // todo :: join a family by uid
       print("muhahahaha it works")
     }
+    let joinAction = UIAlertAction(title: "Join family", style: .default){ _ in
+      // todo :: join a family by uid
+      print("join action complete")
+    }
     createFamilyAlert.addAction(createAction)
+    joinFamilyAlert.addAction(joinAction)
 
     present(alert, animated: true, completion: nil)
   }  
