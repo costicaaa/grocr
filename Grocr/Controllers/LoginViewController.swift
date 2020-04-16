@@ -185,7 +185,7 @@ class LoginViewController: UIViewController {
       let user = Auth.auth().currentUser!
       let dbRef = Database.database().reference()
       let key = dbRef.child("families").childByAutoId().key
-      dbRef.child("families").child(key).child("familyName").setValue(createFamilyAlert.textFields![0])
+      dbRef.child("families").child(key).child("familyName").setValue(createFamilyAlert.textFields![0].text!)
       // let family = [
       //   "familyName": createFamilyAlert.textFields![0].text!, 
       //   "users" : [user.uid]
