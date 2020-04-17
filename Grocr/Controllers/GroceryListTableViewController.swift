@@ -9,9 +9,9 @@ class GroceryListTableViewController: UITableViewController {
   var items: [GroceryItem] = []
   var user: User!
   var userCountBarButtonItem: UIBarButtonItem!
-  let ref = Database.database().reference(withPath: "grocery-items")
+  var ref = Database.database().reference()
   let usersRef = Database.database().reference(withPath: "online")
-    let dbRef = Database.database().reference()
+  let dbRef = Database.database().reference()
   var userName = ""; 
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -27,8 +27,8 @@ class GroceryListTableViewController: UITableViewController {
       // Get user value
       let value = snapshot.value as? NSDictionary
      
-      self.userName = value?["userName"] as? String ?? "fcked up bro"
-        
+      self.userName = value?["userName"] as? String ?? "what is this??? #100"
+      ref = Database.database.reference.withPath("families/\(value?["familyUID"])/grocery-items")
         
       }) { (error) in
         print(error.localizedDescription)
@@ -57,22 +57,6 @@ class GroceryListTableViewController: UITableViewController {
       self.tableView.reloadData()
     })
     
-    Auth.auth().addStateDidChangeListener { auth, user in
-      guard let user = user else { return }
-        self.user = User(authData: user)
-      
-      let currentUserRef = self.usersRef.child(self.user.uid)
-      currentUserRef.setValue(self.user.email)
-      currentUserRef.onDisconnectRemoveValue()
-    }
-    
-    // usersRef.observe(.value, with: { snapshot in
-    //   if snapshot.exists() {
-    //     self.userCountBarButtonItem?.title = snapshot.childrenCount.description
-    //   } else {
-    //     self.userCountBarButtonItem?.title = "0"
-    //   }
-    // })
   }
   
   // MARK: UITableView Delegate methods
