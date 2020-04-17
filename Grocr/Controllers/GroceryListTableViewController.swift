@@ -32,7 +32,7 @@ import Firebase
 class GroceryListTableViewController: UITableViewController {
 
   // MARK: Constants
-  let listToUsers = "ListToUsers"
+  let listToUsers = "groceryListToFamilyMembers"
   
   // MARK: Properties
   var items: [GroceryItem] = []
