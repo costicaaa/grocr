@@ -32,7 +32,7 @@ import Firebase
 class LoginViewController: UIViewController {
   
   // MARK: Constants
-  let loginToList = "LoginToList"
+  let familyMembers = "LoginToList"
   
   // MARK: Outlets
   @IBOutlet weak var textFieldLoginEmail: UITextField!
@@ -192,7 +192,7 @@ class LoginViewController: UIViewController {
       ] as [String : Any]
       dbRef.updateChildValues(childUpdates)
       
-      performSegue(withIdentifier: listToUsers, sender: nil)
+        self.performSegue(withIdentifier: self.familyMembers, sender: nil)
     }
 
 
@@ -206,7 +206,7 @@ class LoginViewController: UIViewController {
       ]
       dbRef.updateChildValues(childUpdates)
 
-      performSegue(withIdentifier: listToUsers, sender: nil)
+        self.performSegue(withIdentifier: self.familyMembers, sender: nil)
     }
 
 

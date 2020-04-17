@@ -10,16 +10,8 @@ class OnlineUsersTableViewController: UITableViewController {
   var currentUsers: [String] = []
   let user = Auth.auth().currentUser!
 
-  ref.child("users-info").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
-  // Get user value
-  let value = snapshot.value as? NSDictionary
-  let familyUID = value?["familyUID"] as? String ?? ""
-  }) { (error) in
-    print(error.localizedDescription)
-  }
-  
-  let familyRef = Database.database().reference(withPath: "families/\(familyUID)/users")
 
+    var familyUID = "";
 
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
@@ -28,13 +20,43 @@ class OnlineUsersTableViewController: UITableViewController {
   // MARK: UIViewController Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
-    familyRef.observe(.childAdded, with: { snap in
-      guard let userUID = snap.value as? String else { return }
-      self.currentUsers.append(userUID)
-      let row = self.currentUsers.count - 1
-      let indexPath = IndexPath(row: row, section: 0)
-      self.tableView.insertRows(at: [indexPath], with: .top)
-    })
+    
+    let ref = Database.database().reference()
+    ref.child("users-info").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+    // Get user value
+    let value = snapshot.value as? NSDictionary
+        self.familyUID = value?["familyUID"] as? String ?? ""
+        
+        let familyRef = Database.database().reference(withPath: "families/\(self.familyUID)/users")
+        print("printing family uid now")
+        print(self.familyUID)
+        print("printing family uid now")
+        
+        
+        
+        familyRef.observe(.childAdded, with: { snap in
+          let userUID = snap.value as? String
+            
+          ref.child("users-info").child(userUID!).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            
+            self.currentUsers.append(value?["userName"] as? String ?? "")
+            let row = self.currentUsers.count - 1
+            let indexPath = IndexPath(row: row, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .top)
+        
+          })
+            
+          
+        })
+    }) { (error) in
+      print(error.localizedDescription)
+    }
+    
+    
+    
+    
+    
     // usersRef.observe(.childRemoved, with: { snap in
     //   guard let emailToFind = snap.value as? String else { return }
     //   for (index, email) in self.currentUsers.enumerated() {
