@@ -22,8 +22,8 @@ class GroceryListTableViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    let userID = Auth.auth().currentUser?.uid
-    ref.child("users-info").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
+    let userID = Auth.auth().currentUser?.uid!
+    ref.child("users-info").child(userID!).observe(of: .value, with: { (snapshot) in
       // Get user value
       let value = snapshot.value as? NSDictionary
       self.userName = value?["userName"] as? String ?? ""
