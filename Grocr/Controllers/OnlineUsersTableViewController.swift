@@ -1,31 +1,3 @@
-/// Copyright (c) 2018 Razeware LLC
-///
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-///
-/// The above copyright notice and this permission notice shall be included in
-/// all copies or substantial portions of the Software.
-///
-/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
-/// distribute, sublicense, create a derivative work, and/or sell copies of the
-/// Software in any work that is designed, intended, or marketed for pedagogical or
-/// instructional purposes related to programming, coding, application development,
-/// or information technology.  Permission for such use, copying, modification,
-/// merger, publication, distribution, sublicensing, creation of derivative works,
-/// or sale is expressly withheld.
-///
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-/// THE SOFTWARE.
-
 import UIKit
 import Firebase
 
@@ -36,8 +8,19 @@ class OnlineUsersTableViewController: UITableViewController {
   
   // MARK: Properties
   var currentUsers: [String] = []
-  let usersRef = Database.database().reference(withPath: "online")
+  let user = Auth.auth().currentUser!
+
+  ref.child("users-info").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+  // Get user value
+  let value = snapshot.value as? NSDictionary
+  let familyUID = value?["familyUID"] as? String ?? ""
+  }) { (error) in
+    print(error.localizedDescription)
+  }
   
+  let familyRef = Database.database().reference(withPath: "families/\(familyUID)/users")
+
+
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
@@ -45,23 +28,23 @@ class OnlineUsersTableViewController: UITableViewController {
   // MARK: UIViewController Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
-    usersRef.observe(.childAdded, with: { snap in
-      guard let email = snap.value as? String else { return }
-      self.currentUsers.append(email)
+    familyRef.observe(.childAdded, with: { snap in
+      guard let userUID = snap.value as? String else { return }
+      self.currentUsers.append(userUID)
       let row = self.currentUsers.count - 1
       let indexPath = IndexPath(row: row, section: 0)
       self.tableView.insertRows(at: [indexPath], with: .top)
     })
-    usersRef.observe(.childRemoved, with: { snap in
-      guard let emailToFind = snap.value as? String else { return }
-      for (index, email) in self.currentUsers.enumerated() {
-        if email == emailToFind {
-          let indexPath = IndexPath(row: index, section: 0)
-          self.currentUsers.remove(at: index)
-          self.tableView.deleteRows(at: [indexPath], with: .fade)
-        }
-      }
-    })
+    // usersRef.observe(.childRemoved, with: { snap in
+    //   guard let emailToFind = snap.value as? String else { return }
+    //   for (index, email) in self.currentUsers.enumerated() {
+    //     if email == emailToFind {
+    //       let indexPath = IndexPath(row: index, section: 0)
+    //       self.currentUsers.remove(at: index)
+    //       self.tableView.deleteRows(at: [indexPath], with: .fade)
+    //     }
+    //   }
+    // })
   }
   
   // MARK: UITableView Delegate methods  

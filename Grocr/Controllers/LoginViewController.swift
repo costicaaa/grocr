@@ -191,6 +191,8 @@ class LoginViewController: UIViewController {
         "/users-info/\(user.uid)/familyUID/": key
       ] as [String : Any]
       dbRef.updateChildValues(childUpdates)
+      
+      performSegue(withIdentifier: listToUsers, sender: nil)
     }
 
 
@@ -203,6 +205,8 @@ class LoginViewController: UIViewController {
         "/users-info/\(user.uid)/familyUID/": joinFamilyAlert.textFields![0].text!
       ]
       dbRef.updateChildValues(childUpdates)
+
+      performSegue(withIdentifier: listToUsers, sender: nil)
     }
 
 
