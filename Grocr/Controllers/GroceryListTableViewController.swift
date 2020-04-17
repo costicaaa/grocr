@@ -1,38 +1,9 @@
-/// Copyright (c) 2018 Razeware LLC
-///
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-///
-/// The above copyright notice and this permission notice shall be included in
-/// all copies or substantial portions of the Software.
-///
-/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
-/// distribute, sublicense, create a derivative work, and/or sell copies of the
-/// Software in any work that is designed, intended, or marketed for pedagogical or
-/// instructional purposes related to programming, coding, application development,
-/// or information technology.  Permission for such use, copying, modification,
-/// merger, publication, distribution, sublicensing, creation of derivative works,
-/// or sale is expressly withheld.
-///
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-/// THE SOFTWARE.
-
 import UIKit
 import Firebase
 
 class GroceryListTableViewController: UITableViewController {
 
   // MARK: Constants
-  let listToUsers = "groceryListToFamilyMembers"
   
   // MARK: Properties
   var items: [GroceryItem] = []
@@ -40,6 +11,8 @@ class GroceryListTableViewController: UITableViewController {
   var userCountBarButtonItem: UIBarButtonItem!
   let ref = Database.database().reference(withPath: "grocery-items")
   let usersRef = Database.database().reference(withPath: "online")
+
+  var userName = ""; 
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
@@ -48,6 +21,16 @@ class GroceryListTableViewController: UITableViewController {
   // MARK: UIViewController Lifecycle  
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    let userID = Auth.auth().currentUser?.uid
+    ref.child("users-info").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
+      // Get user value
+      let value = snapshot.value as? NSDictionary
+      self.userName = value?["userName"] as? String ?? ""
+      }) { (error) in
+        print(error.localizedDescription)
+    }
+    
     
     tableView.allowsMultipleSelectionDuringEditing = false
     
@@ -58,7 +41,7 @@ class GroceryListTableViewController: UITableViewController {
     userCountBarButtonItem.tintColor = UIColor.white
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
-    ref.queryOrdered(byChild: "completed").observe(.value, with: { snapshot in
+    ref.queryOrdered(byChild: "addedByUser").observe(.value, with: { snapshot in
       var newItems: [GroceryItem] = []
       for child in snapshot.children {
         if let snapshot = child as? DataSnapshot,
@@ -73,20 +56,20 @@ class GroceryListTableViewController: UITableViewController {
     
     Auth.auth().addStateDidChangeListener { auth, user in
       guard let user = user else { return }
-        self.user = User(authData: user, name: "cucurigu")
+        self.user = User(authData: user)
       
       let currentUserRef = self.usersRef.child(self.user.uid)
       currentUserRef.setValue(self.user.email)
       currentUserRef.onDisconnectRemoveValue()
     }
     
-    usersRef.observe(.value, with: { snapshot in
-      if snapshot.exists() {
-        self.userCountBarButtonItem?.title = snapshot.childrenCount.description
-      } else {
-        self.userCountBarButtonItem?.title = "0"
-      }
-    })
+    // usersRef.observe(.value, with: { snapshot in
+    //   if snapshot.exists() {
+    //     self.userCountBarButtonItem?.title = snapshot.childrenCount.description
+    //   } else {
+    //     self.userCountBarButtonItem?.title = "0"
+    //   }
+    // })
   }
   
   // MARK: UITableView Delegate methods
@@ -151,7 +134,7 @@ class GroceryListTableViewController: UITableViewController {
       
 
       let groceryItem = GroceryItem(name: text,
-                                    addedByUser: self.user.email,
+                                    addedByUser: self.userName,
                                     completed: false)
 
       let groceryItemRef = self.ref.child(text.lowercased())
@@ -171,6 +154,6 @@ class GroceryListTableViewController: UITableViewController {
   }
   
   @objc func userCountButtonDidTouch() {
-    performSegue(withIdentifier: listToUsers, sender: nil)
+    performSegue(withIdentifier: "groceryListToFamilyMembers", sender: nil)
   }
 }
