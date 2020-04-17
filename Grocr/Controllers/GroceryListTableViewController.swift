@@ -11,7 +11,7 @@ class GroceryListTableViewController: UITableViewController {
   var userCountBarButtonItem: UIBarButtonItem!
   let ref = Database.database().reference(withPath: "grocery-items")
   let usersRef = Database.database().reference(withPath: "online")
-
+    let dbRef = Database.database().reference()
   var userName = ""; 
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -22,11 +22,14 @@ class GroceryListTableViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    let userID = Auth.auth().currentUser?.uid!
-    ref.child("users-info").child(userID!).observe(of: .value, with: { (snapshot) in
+    let userID = Auth.auth().currentUser?.uid
+    dbRef.child("users-info").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
       // Get user value
       let value = snapshot.value as? NSDictionary
-      self.userName = value?["userName"] as? String ?? ""
+     
+      self.userName = value?["userName"] as? String ?? "fcked up bro"
+        
+        
       }) { (error) in
         print(error.localizedDescription)
     }
@@ -132,7 +135,9 @@ class GroceryListTableViewController: UITableViewController {
       guard let textField = alert.textFields?.first,
         let text = textField.text else { return }
       
-
+print("printing self.userName")
+        print(self.userName)
+        print("done printing")
       let groceryItem = GroceryItem(name: text,
                                     addedByUser: self.userName,
                                     completed: false)
