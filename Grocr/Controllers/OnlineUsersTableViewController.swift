@@ -28,25 +28,14 @@ class OnlineUsersTableViewController: UITableViewController {
         self.familyUID = value?["familyUID"] as? String ?? ""
         
         let familyRef = Database.database().reference(withPath: "families/\(self.familyUID)/users")
-        print("printing family uid now")
-        print(self.familyUID)
-        print("printing family uid now")
-        
-        
         
         familyRef.observe(.childAdded, with: { snap in
           let userUID = snap.value as? String
             
-          ref.child("users-info").child(userUID!).observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            
-            self.currentUsers.append(value?["userName"] as? String ?? "")
-            let row = self.currentUsers.count - 1
-            let indexPath = IndexPath(row: row, section: 0)
-            self.tableView.insertRows(at: [indexPath], with: .top)
-        
-          })
-            
+          self.currentUsers.append(value?["userName"] as? String ?? "")
+          let row = self.currentUsers.count - 1
+          let indexPath = IndexPath(row: row, section: 0)
+          self.tableView.insertRows(at: [indexPath], with: .top)
           
         })
     }) { (error) in

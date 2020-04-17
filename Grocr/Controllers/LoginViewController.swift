@@ -31,6 +31,8 @@ import Firebase
 
 class LoginViewController: UIViewController {
   
+  var userName = "";
+
   // MARK: Constants
   let familyMembers = "LoginToList"
   
@@ -107,6 +109,7 @@ class LoginViewController: UIViewController {
       let emailField = alert.textFields![1]
       let passwordField = alert.textFields![2]
       let nameField = alert.textFields![0]
+      self.userName= nameField;
       
       Auth.auth().createUser(withEmail: emailField.text!, password: passwordField.text!) { user, error in
         if error == nil {
@@ -186,7 +189,10 @@ class LoginViewController: UIViewController {
       let dbRef = Database.database().reference()
       let key = dbRef.child("families").childByAutoId().key
       dbRef.child("families").child(key).child("familyName").setValue(createFamilyAlert.textFields![0].text!)
-      dbRef.child("families").child(key).child("users").childByAutoId().setValue(user.uid)
+      dbRef.child("families").child(key).child("users").childByAutoId().setValue([
+        "userUID": user.uid,
+        "userName": self.userName
+      ])
       let childUpdates = [
         "/users-info/\(user.uid)/familyUID/": key
       ] as [String : Any]
@@ -200,7 +206,10 @@ class LoginViewController: UIViewController {
       let user = Auth.auth().currentUser!
 
       let dbRef = Database.database().reference()
-      dbRef.child("families").child(joinFamilyAlert.textFields![0].text!).child("users").childByAutoId().setValue(user.uid)
+      dbRef.child("families").child(joinFamilyAlert.textFields![0].text!).child("users").childByAutoId().setValue([
+        "userUID": user.uid,
+        "userName": self.userName
+      ])
       let childUpdates = [
         "/users-info/\(user.uid)/familyUID/": joinFamilyAlert.textFields![0].text!
       ]
