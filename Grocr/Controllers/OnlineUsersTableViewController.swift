@@ -30,9 +30,9 @@ class OnlineUsersTableViewController: UITableViewController {
         let familyRef = Database.database().reference(withPath: "families/\(self.familyUID)/users")
         
         familyRef.observe(.childAdded, with: { snap in
-          let userUID = snap.value as? String
-            
-          self.currentUsers.append(value?["userName"] as? String ?? "")
+        
+            let temp = snap.value as? NSDictionary
+            self.currentUsers.append(temp?["userName"] as? String ?? "")
           let row = self.currentUsers.count - 1
           let indexPath = IndexPath(row: row, section: 0)
           self.tableView.insertRows(at: [indexPath], with: .top)

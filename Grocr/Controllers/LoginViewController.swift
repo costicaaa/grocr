@@ -109,8 +109,8 @@ class LoginViewController: UIViewController {
       let emailField = alert.textFields![1]
       let passwordField = alert.textFields![2]
       let nameField = alert.textFields![0]
-      self.userName= nameField;
-      
+      self.userName = nameField.text!
+        
       Auth.auth().createUser(withEmail: emailField.text!, password: passwordField.text!) { user, error in
         if error == nil {
           Auth.auth().signIn(withEmail: self.textFieldLoginEmail.text!,
