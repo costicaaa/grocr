@@ -66,7 +66,7 @@ class AvailableCouriersViewController: UITableViewController {
     //   ])
   }
 
-    func toggleCellCheckbo(_ cell: UITableViewCell, userInfoItem: UserInfo) {
+    func toggleCellCheckbox(_ cell: UITableViewCell, userInfoItem: UserInfo) {
       print("clicked a row")
         // print(userInfoItem.key)
         print(userInfoItem.userName)
@@ -74,6 +74,7 @@ class AvailableCouriersViewController: UITableViewController {
           let alert = UIAlertController(title: "Send order to " + userInfoItem.userName,
                                   message: "Are you sure?",
                                   preferredStyle: .alert)
+        
 
       let cancelAction = UIAlertAction(title: "Cancel",
                                         style: .cancel)
@@ -81,13 +82,12 @@ class AvailableCouriersViewController: UITableViewController {
       let saveAction = UIAlertAction(title: "Send", style: .default) { _ in
         print("now send order")
         }
-    }
-
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         
+       self.present(alert, animated: true, completion: nil)
+    }
+
+        
+        
   }
-
-
- 
-}
