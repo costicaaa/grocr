@@ -35,7 +35,7 @@ class LoginViewController: UIViewController {
         self.textFamilyUID = nil
         self.textFamilyName = nil
         
-//        self.performSegue(withIdentifier: "LoginToList", sender: self)
+        self.performSegue(withIdentifier: "LoginToList", sender: self)
       }
     }
     

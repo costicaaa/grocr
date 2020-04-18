@@ -1,15 +1,15 @@
 import Foundation
 import Firebase
 
-struct GroceryItem {
+struct UserInfo {
   
   let ref: DatabaseReference?
   let key: String
   let userName: String
-  let type: Number
+  let type: Int
   let familyUID: String
   
-  init(userName: String, type: Number, familyUID: String, key: String = "") {
+  public init(userName: String, type: Int, familyUID: String, key: String = "") {
     self.ref = nil
     self.key = key
     self.userName = userName
@@ -17,13 +17,13 @@ struct GroceryItem {
     self.familyUID = familyUID
   }
   
-  init?(snapshot: DataSnapshot) {
+  public init?(snapshot: DataSnapshot) {
     guard
       let value = snapshot.value as? [String: AnyObject],
       let userName = value["userName"] as? String,
-      let type = value["type"] as? Number,
-      let familyUID = value["familyUID"] as? String,
-      return nil
+      let type = value["type"] as? Int,
+      let familyUID = value["familyUID"] as? String else {
+        return nil
     }
     
     self.ref = snapshot.ref

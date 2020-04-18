@@ -9,7 +9,7 @@ class AvailableCouriersViewController: UITableViewController {
   // MARK: Properties
   var currentUsers: [String] = []
   let user = Auth.auth().currentUser!
-    var items: [GroceryItem] = []
+    var items: [UserInfo] = []
 
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
@@ -29,12 +29,13 @@ class AvailableCouriersViewController: UITableViewController {
                 for child in snapshot.children {
                   if let snapshot = child as? DataSnapshot,
                     let userInfoItem = UserInfo(snapshot: snapshot) {
-                    newItems.append(groceryItem)
-                  }
+                    newItems.append(userInfoItem)
+                    }
                 }
                 
                 self.items = newItems
                 self.tableView.reloadData()
+    })
 
     // couriersRef.observe(.childAdded, with: { snap in
     //   let temp = snap.value as? NSDictionary
@@ -53,8 +54,8 @@ class AvailableCouriersViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: userCell, for: indexPath)
-    let onlineUserEmail = items[indexPath.row]
-    cell.textLabel?.text = onlineUserEmail
+    let userName = items[indexPath.row].userName
+    cell.textLabel?.text = userName
     return cell
   }
   
@@ -63,13 +64,15 @@ class AvailableCouriersViewController: UITableViewController {
     guard let cell = tableView.cellForRow(at: indexPath) else { return }
     let userInfoItem = items[indexPath.row]
     // let toggledCompletion = !groceryItem.completed
-    toggleCellCheckbox(cell)
+    toggleCellCheckbox(cell, userInfoItem: userInfoItem)
     // groceryItem.ref?.updateChildValues([
     //   "completed": toggledCompletion
     //   ])
   }
 
-  func toggleCellCheckbox(_ cell: UITableViewCell) {
+    func toggleCellCheckbox(_ cell: UITableViewCell, userInfoItem: UserInfo) {
     print("clicked a row")
+        print(userInfoItem.key)
+        print(userInfoItem.user)
   }
 }
