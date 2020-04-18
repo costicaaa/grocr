@@ -28,8 +28,20 @@ class GroceryListTableViewController: UITableViewController {
       let value = snapshot.value as? NSDictionary
      
       self.userName = value?["userName"] as? String ?? "what is this??? #100"
-      ref = Database.database.reference.withPath("families/\(value?["familyUID"])/grocery-items")
+        self.ref = Database.database().reference(withPath: "families/\(value?["familyUID"] as? String ?? "" )/grocery-items")
         
+        self.ref.queryOrdered(byChild: "addedByUser").observe(.value, with: { snapshot in
+          var newItems: [GroceryItem] = []
+          for child in snapshot.children {
+            if let snapshot = child as? DataSnapshot,
+              let groceryItem = GroceryItem(snapshot: snapshot) {
+              newItems.append(groceryItem)
+            }
+          }
+          
+          self.items = newItems
+          self.tableView.reloadData()
+        })
       }) { (error) in
         print(error.localizedDescription)
     }
@@ -44,18 +56,7 @@ class GroceryListTableViewController: UITableViewController {
     userCountBarButtonItem.tintColor = UIColor.white
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
-    ref.queryOrdered(byChild: "addedByUser").observe(.value, with: { snapshot in
-      var newItems: [GroceryItem] = []
-      for child in snapshot.children {
-        if let snapshot = child as? DataSnapshot,
-          let groceryItem = GroceryItem(snapshot: snapshot) {
-          newItems.append(groceryItem)
-        }
-      }
-      
-      self.items = newItems
-      self.tableView.reloadData()
-    })
+    
     
   }
   

@@ -24,16 +24,24 @@ class LoginViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    
     Auth.auth().addStateDidChangeListener() { auth, user in
+       
+        
       if user != nil {
         self.textFieldLoginEmail.text = nil
         self.textFieldLoginPassword.text = nil
         self.textFieldUserName = nil
         self.textFamilyUID = nil
         self.textFamilyName = nil
+        
+        self.performSegue(withIdentifier: "LoginToList", sender: self)
       }
     }
-  }
+    
+    }
+    
+  
   
   // MARK: Actions
   @IBAction func loginDidTouch(_ sender: AnyObject) {
@@ -56,6 +64,9 @@ class LoginViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
       }
+      else{
+        self.performSegue(withIdentifier: "LoginToList", sender: self)
+        }
     }
   }
   
