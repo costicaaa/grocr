@@ -18,6 +18,7 @@
 		649F422820438D5400B21997 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 649F422720438D5400B21997 /* Main.storyboard */; };
 		95F65799424252A5A9C5A1C7 /* libPods-Grocr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9329CDD67FBDDC24EC3B34C8 /* libPods-Grocr.a */; };
 		9683469C24437964009F1DFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9683469B24437964009F1DFA /* GoogleService-Info.plist */; };
+		96A5D75D244B1D5E00AF38CF /* AvailableCouriersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5D75C244B1D5E00AF38CF /* AvailableCouriersViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		90E01CD9D5C237C44E4FC22B /* Pods-Grocr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grocr.release.xcconfig"; path = "Pods/Target Support Files/Pods-Grocr/Pods-Grocr.release.xcconfig"; sourceTree = "<group>"; };
 		9329CDD67FBDDC24EC3B34C8 /* libPods-Grocr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Grocr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9683469B24437964009F1DFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		96A5D75C244B1D5E00AF38CF /* AvailableCouriersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCouriersViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				649F421F20438D1B00B21997 /* GroceryListTableViewController.swift */,
 				649F421D20438D1A00B21997 /* LoginViewController.swift */,
 				649F421E20438D1A00B21997 /* OnlineUsersTableViewController.swift */,
+				96A5D75C244B1D5E00AF38CF /* AvailableCouriersViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 			files = (
 				649F422020438D1B00B21997 /* LoginViewController.swift in Sources */,
 				649F422120438D1B00B21997 /* OnlineUsersTableViewController.swift in Sources */,
+				96A5D75D244B1D5E00AF38CF /* AvailableCouriersViewController.swift in Sources */,
 				649F422520438D2E00B21997 /* User.swift in Sources */,
 				649F422220438D1B00B21997 /* GroceryListTableViewController.swift in Sources */,
 				645D7898204344160093B00C /* AppDelegate.swift in Sources */,
