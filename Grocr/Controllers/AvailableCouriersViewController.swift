@@ -37,13 +37,9 @@ class AvailableCouriersViewController: UITableViewController {
                 self.tableView.reloadData()
     })
 
-    // couriersRef.observe(.childAdded, with: { snap in
-    //   let temp = snap.value as? NSDictionary
-    //   self.currentUsers.append(temp?["userName"] as? String ?? "")
-    //   let row = self.currentUsers.count - 1
-    //   let indexPath = IndexPath(row: row, section: 0)
-    //   self.tableView.insertRows(at: [indexPath], with: .top)
-    // })
+
+
+
 
   }
   
@@ -70,9 +66,28 @@ class AvailableCouriersViewController: UITableViewController {
     //   ])
   }
 
-    func toggleCellCheckbox(_ cell: UITableViewCell, userInfoItem: UserInfo) {
-    print("clicked a row")
-        print(userInfoItem.key)
-        print(userInfoItem.user)
+    func toggleCellCheckbo(_ cell: UITableViewCell, userInfoItem: UserInfo) {
+      print("clicked a row")
+        // print(userInfoItem.key)
+        print(userInfoItem.userName)
+
+          let alert = UIAlertController(title: "Send order to " + userInfoItem.userName,
+                                  message: "Are you sure?",
+                                  preferredStyle: .alert)
+
+      let cancelAction = UIAlertAction(title: "Cancel",
+                                        style: .cancel)
+
+      let saveAction = UIAlertAction(title: "Send", style: .default) { _ in
+        print("now send order")
+        }
+    }
+
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        
   }
+
+
+ 
 }
