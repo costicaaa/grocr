@@ -91,20 +91,25 @@ class AvailableCouriersViewController: UITableViewController {
         let newOrderRef = Database.database().reference()
             let newOrderKey = newOrderRef.child("families").child(familyUID).child("orders").childByAutoId().key
           
-            let anotherDbRef = Database.database().reference()
+            let familyOrderRef = Database.database().reference()
+            let orderRef = Database.database().reference().child("orders")
 
-            anotherDbRef.child("families").child(familyUID).child("orders").child(newOrderKey).setValue([
-          "deliveryUserUID": userInfoItem.key,
-          "deliveryUserName": userInfoItem.userName,
-          "forFamilyUID": userInfoItem.familyUID,
-          "status": "processing",
-          "groceryItems" : []
-        ])
-
-            let orderGroceryItemsRef = Database.database().reference().child("families").child(familyUID).child("orders").child(newOrderKey).child("groceryItems")
-        for newOrderItem in self.newOrderItems {
-          orderGroceryItemsRef.childByAutoId().setValue(newOrderItem.toAnyObject())
-        }
+            var arrayItems = [Any]()
+            for newOrderItem in self.newOrderItems {
+                arrayItems.append(newOrderItem.toAnyObject())
+            }
+            let orderValue = [
+              "deliveryUserUID": userInfoItem.key,
+              "deliveryUserName": userInfoItem.userName,
+              "forFamilyUID": currentUserInfo?["familyUID"] as? String ?? "why_no_family_UID?" ,
+              "status": "processing",
+              "groceryItems" : arrayItems
+            ] as [String : Any]
+            
+        familyOrderRef.child("families").child(familyUID).child("orders").child(newOrderKey).setValue(orderValue)
+            orderRef.child(newOrderKey).setValue(orderValue)
+            
+        
               
       })
     }
