@@ -72,14 +72,28 @@ class AvailableCouriersViewController: UITableViewController {
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
 
     let saveAction = UIAlertAction(title: "Send", style: .default) { _ in
-      self.ref.child("users-info").child(self.user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
-        // Get user value
+        print("self.user.uid in save action 111")
+        print(self.user.uid)
+        let dbRef = Database.database().reference()
+        dbRef.child("users-info").child(self.user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+        print("self.user.uid in save action 222")
+        print(self.user.uid)
+        
         let currentUserInfo = snapshot.value as? NSDictionary
-        let familyUID = currentUserInfo?["familyUID"] as? String ?? ""
+        
+        print("currentUserInfoin save action")
+        print(currentUserInfo)
+        
+        
+        let familyUID = currentUserInfo?["familyUID"] as? String ?? "what is going on"
+        print("family uid = " + familyUID)
           
-        let newOrderKey = self.ref.child("families").child(familyUID).child("orders").childByAutoId().key
+        let newOrderRef = Database.database().reference()
+            let newOrderKey = newOrderRef.child("families").child(familyUID).child("orders").childByAutoId().key
           
-        self.ref.child("families").child(familyUID).child("orders").childByAutoId().setValue([
+            let anotherDbRef = Database.database().reference()
+
+            anotherDbRef.child("families").child(familyUID).child("orders").child(newOrderKey).setValue([
           "deliveryUserUID": userInfoItem.key,
           "deliveryUserName": userInfoItem.userName,
           "forFamilyUID": userInfoItem.familyUID,
@@ -87,8 +101,9 @@ class AvailableCouriersViewController: UITableViewController {
           "groceryItems" : []
         ])
 
+            let orderGroceryItemsRef = Database.database().reference().child("families").child(familyUID).child("orders").child(newOrderKey).child("groceryItems")
         for newOrderItem in self.newOrderItems {
-          self.ref.child("families").child(familyUID).child("orders").child("groceryItems").childByAutoId().setValue(newOrderItem.toAnyObject())
+          orderGroceryItemsRef.childByAutoId().setValue(newOrderItem.toAnyObject())
         }
               
       })
@@ -112,8 +127,10 @@ class AvailableCouriersViewController: UITableViewController {
           
           for child in snapshot.children {
             if let snapshot = child as? DataSnapshot,
-              let orderItem = GroceryItem(snapshot: snapshot) 
-              self.newOrderItems.append(orderItem)
+                let orderItem = GroceryItem(snapshot: snapshot)  {
+                self.newOrderItems.append(orderItem)
+            }
+              
           }
           
         self.present(alert, animated: true, completion: nil)
