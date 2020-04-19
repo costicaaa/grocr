@@ -11,7 +11,7 @@ class AvailableCouriersViewController: UITableViewController {
   let user = Auth.auth().currentUser!
   var items: [UserInfo] = []
   var groceryItems : [GroceryItem] = []
-  var ref = Database.database.reference()
+  var ref = Database.database().reference()
   var newOrderItems: [GroceryItem] = []
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
@@ -83,12 +83,14 @@ class AvailableCouriersViewController: UITableViewController {
 
       let saveAction = UIAlertAction(title: "Send", style: .default) { _ in
 
-        let ref = Database.database().reference()
-        ref.child("users-info").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+        
+        self.ref.child("users-info").child(self.user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
           // Get user value
           let currentUserInfo = snapshot.value as? NSDictionary
-          let familyUID = value?["familyUID"] as? String ?? ""
+          let familyUID = currentUserInfo?["familyUID"] as? String ?? ""
+            
           let newOrderKey = self.ref.child("families").child(familyUID).child("orders").childByAutoId().key
+            
           self.ref.child("families").child(familyUID).child("orders").childByAutoId().setValue([
             "deliveryUserUID": userInfoItem.key,
             "deliveryUserName": userInfoItem.userName,
@@ -102,7 +104,7 @@ class AvailableCouriersViewController: UITableViewController {
           }
                 
         })
-      })
+      }
         
       
 
@@ -112,21 +114,27 @@ class AvailableCouriersViewController: UITableViewController {
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
 
-      self.newOrderItems = []
-      self.ref = Database.database().reference(withPath: "families/\(value?["familyUID"] as? String ?? "" )/grocery-items")
-      
-      self.ref.queryOrdered(byChild: "addedByUser").observe(.value, with: { snapshot in
         
-        for child in snapshot.children {
-          if let snapshot = child as? DataSnapshot,
-            let orderItem = GroceryItem(snapshot: snapshot) {
-            self.newOrderItems.append(orderItem)
-          }
-        }
+        self.ref.child("users-info").child(self.user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            let currentUserInfo = snapshot.value as? NSDictionary
+            let familyUID = currentUserInfo?["familyUID"] as? String ?? ""
+        self.newOrderItems = []
+        self.ref = Database.database().reference(withPath: "families/\(familyUID)/grocery-items")
+                 
+                 self.ref.queryOrdered(byChild: "addedByUser").observe(.value, with: { snapshot in
+                   
+                   for child in snapshot.children {
+                     if let snapshot = child as? DataSnapshot,
+                       let orderItem = GroceryItem(snapshot: snapshot) {
+                       self.newOrderItems.append(orderItem)
+                     }
+                   }
+                   
+                  self.present(alert, animated: true, completion: nil)
+        })
         
-       self.present(alert, animated: true, completion: nil)
-    }
+     
+    })
 
-        
-        
-  }
+    
+}
